@@ -1,7 +1,14 @@
 import React from "react";
 
 import GlobalStyles from "./GlobalStyles";
-import { Task } from "./components/Task";
+import { TaskList } from "./components/TaskList";
+import { TaskProps } from "./components/Task";
+
+const mockTasks: TaskProps[] = [
+  { id: 1, title: "Task 1", description: "Description 1", priority: "High" },
+  { id: 2, title: "Task 2", description: "Description 2", priority: "Medium" },
+  { id: 3, title: "Task 3", description: "Description 3", priority: "Low" },
+];
 
 const App: React.FC = () => {
   return (
@@ -9,11 +16,7 @@ const App: React.FC = () => {
       <GlobalStyles />
       <div className="app">
         <h1>Task Tracker</h1>
-        <Task
-          title="Test Task"
-          description="This is a test description"
-          priority="High"
-        />
+        <TaskList tasks={mockTasks} filter="Low" />
       </div>
     </>
   );
