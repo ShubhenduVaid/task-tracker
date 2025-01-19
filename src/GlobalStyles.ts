@@ -23,7 +23,7 @@ const GlobalStyles = createGlobalStyle`
 
   .app {
     max-width: 800px;
-    margin: 2rem auto;
+    margin: 0 auto;
     padding: 1.5rem;
   }
 `;

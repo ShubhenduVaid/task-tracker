@@ -36,6 +36,34 @@ export const TaskDescription = styled.p`
 `;
 
 export const TaskPriority = styled.h2<{ priority: PriorityType }>`
-  font-size: 13px;
+  font-size: 16px;
+  padding-top: 9px;
   color: ${({ priority }) => getPriorityColor(priority)};
+`;
+
+export const TaskButton = styled.button`
+  padding: 0.8rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+export const TaskFooterContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+`;
+
+export const TaskButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 `;

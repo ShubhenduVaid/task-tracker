@@ -1,30 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { PriorityType } from "../Task";
-import { Button, Input, Select, TaskFormContainer } from "./TaskForm.style";
+import {
+  TaskFormButton,
+  TaskFormInput,
+  TaskFormSelect,
+  TaskFormContainer,
+} from "./TaskForm.style";
+import { useTaskContext } from "../../contexts/TaskContext";
 
-export interface TaskFormProps {
-  onSubmit: (task: {
-    title: string;
-    description: string;
-    priority: PriorityType;
-  }) => void;
-
+interface TaskPopupProps {
   existingTask?: {
-    id: number;
+    id: string;
     title: string;
     description: string;
     priority: PriorityType;
   };
+  handleUpdate: () => void;
 }
 
-const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, existingTask }) => {
+const TaskForm: React.FC<TaskPopupProps> = ({ existingTask, handleUpdate }) => {
+  const { dispatch } = useTaskContext();
+
+  const [id, setId] = useState<string>("");
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [priority, setPriority] = useState<PriorityType>("Low");
 
   useEffect(() => {
     if (existingTask) {
+      setId(existingTask.id);
       setTitle(existingTask.title);
       setDescription(existingTask.description);
       setPriority(existingTask.priority);
@@ -33,7 +38,22 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, existingTask }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ title, description, priority });
+    if (existingTask) {
+      dispatch({
+        type: "EDIT_TASK",
+        task: { id, title, description, priority },
+      });
+      handleUpdate();
+    } else {
+      const newTask = {
+        id: Date.now().toString(),
+        title,
+        description,
+        priority,
+      };
+      dispatch({ type: "ADD_TASK", task: newTask });
+    }
+
     setTitle("");
     setDescription("");
     setPriority("Low");
@@ -41,21 +61,21 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, existingTask }) => {
 
   return (
     <TaskFormContainer onSubmit={handleSubmit}>
-      <Input
+      <TaskFormInput
         type="text"
         placeholder="Title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
       />
-      <Input
+      <TaskFormInput
         type="text"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         required
       />
-      <Select
+      <TaskFormSelect
         name="priority"
         value={priority}
         onChange={(e) => setPriority(e.target.value as PriorityType)}
@@ -66,8 +86,10 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, existingTask }) => {
         <option value="Low">Low</option>
         <option value="Medium">Medium</option>
         <option value="High">High</option>
-      </Select>
-      <Button type="submit">{existingTask ? "Update Task" : "Add Task"}</Button>
+      </TaskFormSelect>
+      <TaskFormButton type="submit">
+        {existingTask ? "Update Task" : "Add Task"}
+      </TaskFormButton>
     </TaskFormContainer>
   );
 };

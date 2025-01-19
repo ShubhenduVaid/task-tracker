@@ -13,21 +13,21 @@ export const TaskFormContainer = styled.form`
   box-shadow: 2px 6px 6px rgba(0, 0, 0, 0.1);
 `;
 
-export const Input = styled.input`
+export const TaskFormInput = styled.input`
   padding: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
 `;
 
-export const Select = styled.select`
+export const TaskFormSelect = styled.select`
   padding: 0.8rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
 `;
 
-export const Button = styled.button`
+export const TaskFormButton = styled.button`
   padding: 0.8rem;
   background-color: #007bff;
   color: #fff;

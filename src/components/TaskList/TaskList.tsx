@@ -1,21 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { TaskListContainer } from "./TaskList.style";
-import { PriorityType, Task, TaskProps } from "../Task";
+import { useTaskContext } from "../../contexts/TaskContext";
+import { PriorityType, Task } from "../Task";
+import { TaskPopup } from "../TaskPopup";
 
-export interface TaskListProps {
-  tasks: TaskProps[];
-  filter?: PriorityType;
-}
+const TaskList: React.FC = () => {
+  const { state, dispatch } = useTaskContext();
 
-const TaskList: React.FC<TaskListProps> = ({ tasks, filter = "" }) => {
-  const filteredTasks = filter
-    ? tasks.filter((task) => task.priority === filter)
-    : tasks;
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+  const [id, setId] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [priority, setPriority] = useState<PriorityType>("Low");
 
-  if (filteredTasks.length === 0) {
-    return <p>No tasks available.</p>;
-  }
+  const handleEdit = (
+    id: string,
+    title: string,
+    description: string,
+    priority: PriorityType
+  ) => {
+    setId(id);
+    setTitle(title);
+    setDescription(description);
+    setPriority(priority);
+    setIsPopupOpen(true);
+  };
+
+  const handleDelete = (id: string) => {
+    dispatch({ type: "DELETE_TASK", id });
+  };
+
+  const handlePopupClose = () => {
+    setIsPopupOpen(false);
+  };
+
+  const filteredTasks =
+    state.filter === "All"
+      ? state.tasks
+      : state.tasks.filter((task) => task.priority === state.filter);
 
   return (
     <TaskListContainer>
@@ -26,8 +49,19 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, filter = "" }) => {
           title={task.title}
           description={task.description}
           priority={task.priority}
+          handleDelete={handleDelete}
+          handleEdit={handleEdit}
         />
       ))}
+      {isPopupOpen && (
+        <TaskPopup
+          id={id}
+          title={title}
+          description={description}
+          priority={priority}
+          handlePopupClose={handlePopupClose}
+        />
+      )}
     </TaskListContainer>
   );
 };
