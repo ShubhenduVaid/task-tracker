@@ -4,7 +4,8 @@ import { TaskContainer, TaskTitle, TaskDescription } from "./";
 
 export type PriorityType = "Low" | "Medium" | "High";
 
-interface TaskProps {
+export interface TaskProps {
+  id?: number;
   title: string;
   description: string;
   priority: PriorityType;
