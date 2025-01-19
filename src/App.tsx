@@ -16,7 +16,7 @@ const App: React.FC = () => {
       <GlobalStyles />
       <div className="app">
         <h1>Task Tracker</h1>
-        <TaskList tasks={mockTasks} filter="Low" />
+        <TaskList tasks={mockTasks} />
       </div>
     </>
   );
