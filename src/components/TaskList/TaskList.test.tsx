@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
 
 import TaskList from "./TaskList";
 import { TaskProps } from "../Task";

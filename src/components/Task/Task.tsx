@@ -1,6 +1,11 @@
 import React from "react";
 
-import { TaskContainer, TaskTitle, TaskDescription } from "./";
+import {
+  TaskContainer,
+  TaskTitle,
+  TaskDescription,
+  TaskPriority,
+} from "./Task.style";
 
 export type PriorityType = "Low" | "Medium" | "High";
 
@@ -16,7 +21,7 @@ const Task: React.FC<TaskProps> = ({ title, description, priority }) => {
     <TaskContainer>
       <TaskTitle>{title}</TaskTitle>
       <TaskDescription>{description}</TaskDescription>
-      <p>Priority: {priority}</p>
+      <TaskPriority priority={priority}>{priority}</TaskPriority>
     </TaskContainer>
   );
 };

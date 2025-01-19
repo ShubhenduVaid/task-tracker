@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
 
 import Task, { PriorityType } from "./Task";
 
@@ -24,7 +23,7 @@ describe("Task Component", () => {
 
   it("renders the task priority", () => {
     render(<Task {...taskProps} />);
-    const priorityElement = screen.getByText(/Priority: High/i);
+    const priorityElement = screen.getByText("High");
     expect(priorityElement).toBeInTheDocument();
   });
 });

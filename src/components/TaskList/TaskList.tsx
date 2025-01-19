@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TaskListContainer } from "./";
+import { TaskListContainer } from "./TaskList.style";
 import { PriorityType, Task, TaskProps } from "../Task";
 
 export interface TaskListProps {
