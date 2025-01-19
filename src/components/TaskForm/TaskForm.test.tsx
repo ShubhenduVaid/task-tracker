@@ -1,52 +1,138 @@
-import { render, fireEvent, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { TaskForm } from "./";
-import { PriorityType } from "../Task";
+import TaskForm from "./TaskForm";
+import { useTaskContext } from "../../contexts/TaskContext";
+import { PriorityType } from "../Task/Task";
 
-describe("TaskForm", () => {
-  it("renders the form correctly", () => {
-    render(<TaskForm onSubmit={vi.fn()} />);
+vi.mock("../../contexts/TaskContext", () => ({
+  useTaskContext: vi.fn(),
+}));
+
+describe("TaskForm Component", () => {
+  const mockDispatch = vi.fn();
+  const mockHandleUpdate = vi.fn();
+
+  beforeEach(() => {
+    (useTaskContext as jest.Mock).mockReturnValue({
+      dispatch: mockDispatch,
+    });
+    mockDispatch.mockClear();
+    mockHandleUpdate.mockClear();
+  });
+
+  it("renders input fields and submit button correctly", () => {
+    render(<TaskForm handleUpdate={mockHandleUpdate} />);
 
     expect(screen.getByPlaceholderText("Title")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Description")).toBeInTheDocument();
     expect(screen.getByText("Add Task")).toBeInTheDocument();
+    expect(screen.getByRole("combobox")).toBeInTheDocument();
   });
 
-  it("renders existing task data for editing", () => {
+  it("populates fields with existing task data when provided", () => {
     const existingTask = {
-      id: 1,
-      title: "Existing Task",
-      description: "Existing description",
+      id: "1",
+      title: "Sample Task",
+      description: "Sample Description",
       priority: "Medium" as PriorityType,
     };
 
-    render(<TaskForm onSubmit={vi.fn()} existingTask={existingTask} />);
-
-    expect(screen.getByPlaceholderText("Title")).toHaveValue("Existing Task");
-    expect(screen.getByPlaceholderText("Description")).toHaveValue(
-      "Existing description"
+    render(
+      <TaskForm existingTask={existingTask} handleUpdate={mockHandleUpdate} />
     );
-    expect(screen.getByDisplayValue("Medium")).toBeInTheDocument();
+
+    expect(screen.getByPlaceholderText("Title")).toHaveValue("Sample Task");
+    expect(screen.getByPlaceholderText("Description")).toHaveValue(
+      "Sample Description"
+    );
+    expect(screen.getByRole("combobox")).toHaveValue("Medium");
+    expect(screen.getByText("Update Task")).toBeInTheDocument();
   });
 
-  it("submits the form data", () => {
-    const handleSubmit = vi.fn();
-    render(<TaskForm onSubmit={handleSubmit} />);
+  it("dispatches ADD_TASK action when adding a new task", () => {
+    render(<TaskForm handleUpdate={mockHandleUpdate} />);
 
     fireEvent.change(screen.getByPlaceholderText("Title"), {
       target: { value: "New Task" },
     });
     fireEvent.change(screen.getByPlaceholderText("Description"), {
-      target: { value: "Task description" },
+      target: { value: "New Description" },
+    });
+    fireEvent.change(screen.getByRole("combobox"), {
+      target: { value: "High" },
     });
 
-    fireEvent.click(screen.getByText("Add Task"));
+    fireEvent.submit(screen.getByRole("form"));
 
-    expect(handleSubmit).toHaveBeenCalledWith({
-      title: "New Task",
-      description: "Task description",
-      priority: "Low",
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: "ADD_TASK",
+      task: expect.objectContaining({
+        title: "New Task",
+        description: "New Description",
+        priority: "High",
+      }),
     });
+
+    expect(screen.getByPlaceholderText("Title")).toHaveValue("");
+    expect(screen.getByPlaceholderText("Description")).toHaveValue("");
+    expect(screen.getByRole("combobox")).toHaveValue("Low");
+  });
+
+  it("dispatches EDIT_TASK action when updating an existing task", () => {
+    const existingTask = {
+      id: "1",
+      title: "Sample Task",
+      description: "Sample Description",
+      priority: "Medium" as PriorityType,
+    };
+
+    render(
+      <TaskForm existingTask={existingTask} handleUpdate={mockHandleUpdate} />
+    );
+
+    fireEvent.change(screen.getByPlaceholderText("Title"), {
+      target: { value: "Updated Task" },
+    });
+
+    fireEvent.submit(screen.getByRole("form"));
+
+    expect(mockDispatch).toHaveBeenCalledWith({
+      type: "EDIT_TASK",
+      task: {
+        id: "1",
+        title: "Updated Task",
+        description: "Sample Description",
+        priority: "Medium",
+      },
+    });
+
+    expect(mockHandleUpdate).toHaveBeenCalled();
+  });
+
+  it("resets fields after submitting a new task", () => {
+    render(<TaskForm handleUpdate={mockHandleUpdate} />);
+
+    fireEvent.change(screen.getByPlaceholderText("Title"), {
+      target: { value: "Another Task" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Description"), {
+      target: { value: "Another Description" },
+    });
+    fireEvent.change(screen.getByRole("combobox"), {
+      target: { value: "Low" },
+    });
+
+    fireEvent.submit(screen.getByRole("form"));
+
+    expect(screen.getByPlaceholderText("Title")).toHaveValue("");
+    expect(screen.getByPlaceholderText("Description")).toHaveValue("");
+    expect(screen.getByRole("combobox")).toHaveValue("Low");
+  });
+
+  it("renders default priority as Low when no existing task is provided", () => {
+    render(<TaskForm handleUpdate={mockHandleUpdate} />);
+
+    expect(screen.getByRole("combobox")).toHaveValue("Low");
   });
 });

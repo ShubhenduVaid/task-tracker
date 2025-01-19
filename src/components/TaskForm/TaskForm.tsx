@@ -16,7 +16,7 @@ interface TaskPopupProps {
     description: string;
     priority: PriorityType;
   };
-  handleUpdate: () => void;
+  handleUpdate?: () => void;
 }
 
 const TaskForm: React.FC<TaskPopupProps> = ({ existingTask, handleUpdate }) => {
@@ -60,7 +60,7 @@ const TaskForm: React.FC<TaskPopupProps> = ({ existingTask, handleUpdate }) => {
   };
 
   return (
-    <TaskFormContainer onSubmit={handleSubmit}>
+    <TaskFormContainer role="form" onSubmit={handleSubmit}>
       <TaskFormInput
         type="text"
         placeholder="Title"

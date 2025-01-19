@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import GlobalStyles from "./GlobalStyles";
 import { TaskList } from "./components/TaskList";
