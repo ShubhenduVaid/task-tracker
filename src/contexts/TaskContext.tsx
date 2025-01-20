@@ -39,7 +39,7 @@ const TaskContext = createContext<{
   dispatch: React.Dispatch<Action>;
 } | null>(null);
 
-const taskReducer = (state: TaskState, action: Action): TaskState => {
+export const taskReducer = (state: TaskState, action: Action): TaskState => {
   switch (action.type) {
     case "ADD_TASK":
       return { ...state, tasks: [...state.tasks, action.task] };
