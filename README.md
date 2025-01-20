@@ -7,12 +7,41 @@ This app has been made using REACT + Typescript + Vite
 
 ## Steps to run app locally
 
-- npm i : Install Dependencies
-- npm run dev : To run app locally
-- npm run build : To generate a build
-- npm run preview : To run generated build locally
-- npm run test : To run tests
-- npm run testCoverage : To run tests and check code coverage
+- Install Dependencies
+
+  ```js
+  npm i
+  ```
+
+- To run app locally
+
+  ```js
+  npm run dev
+  ```
+
+- To generate a build
+
+  ```js
+  npm run build
+  ```
+
+- To run generated build locally
+
+  ```js
+  npm run preview
+  ```
+
+- To run tests
+
+  ```js
+  npm run test
+  ```
+
+- To run tests and check code coverage
+
+  ```js
+  npm run testCoverage
+  ```
 
 ## Functionality
 
