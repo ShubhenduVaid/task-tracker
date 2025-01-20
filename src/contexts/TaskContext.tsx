@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 
 import { PriorityType } from "../components/Task";
 
@@ -54,11 +54,14 @@ const taskReducer = (state: TaskState, action: Action): TaskState => {
 };
 
 export const TaskProvider: React.FC = ({ children }) => {
-  const [state, dispatch] = useReducer(
-    taskReducer,
-    initialState,
-    (init) => init
-  );
+  const [state, dispatch] = useReducer(taskReducer, initialState, (init) => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? { ...init, tasks: JSON.parse(saved) } : init;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(state.tasks));
+  }, [state.tasks]);
 
   return (
     <TaskContext.Provider value={{ state, dispatch }}>
