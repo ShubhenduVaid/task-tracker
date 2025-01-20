@@ -54,6 +54,7 @@ This app has been made using REACT + Typescript + Vite
 - Unit tests for components and Context
 - Used styled-components to ensure styles are specific to the component and avoid class name conflict
 - Simple search function to search tasks by title or description
+- The app is responsive.
 
 ## State Management Using Context API
 
