@@ -12,17 +12,20 @@ type Task = {
 type TaskState = {
   tasks: Task[];
   filter: string;
+  search: string;
 };
 
 type Action =
   | { type: "ADD_TASK"; task: Task }
   | { type: "EDIT_TASK"; task: Task }
   | { type: "DELETE_TASK"; id: string }
-  | { type: "SET_FILTER"; filter: string };
+  | { type: "SET_FILTER"; filter: string }
+  | { type: "SET_SEARCH"; search: string };
 
 const initialState: TaskState = {
   tasks: [],
   filter: "All",
+  search: "",
 };
 
 const TaskContext = createContext<{
@@ -48,6 +51,8 @@ const taskReducer = (state: TaskState, action: Action): TaskState => {
       };
     case "SET_FILTER":
       return { ...state, filter: action.filter };
+    case "SET_SEARCH":
+      return { ...state, search: action.search };
     default:
       return state;
   }

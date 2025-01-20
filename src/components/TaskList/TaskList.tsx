@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { TaskListContainer } from "./TaskList.style";
+import { TaskListContainer, TaskListP } from "./TaskList.style";
 import { useTaskContext } from "../../contexts/TaskContext";
 import { PriorityType, Task } from "../Task";
 import { TaskPopup } from "../TaskPopup";
@@ -35,13 +35,22 @@ const TaskList: React.FC = () => {
     setIsPopupOpen(false);
   };
 
-  const filteredTasks =
+  let filteredTasks =
     state.filter === "All"
       ? state.tasks
       : state.tasks.filter((task) => task.priority === state.filter);
 
+  if (state.search) {
+    filteredTasks = state.tasks.filter(
+      (task) =>
+        task.title.toLowerCase().includes(state.search.toLowerCase()) ||
+        task.description.toLowerCase().includes(state.search.toLowerCase())
+    );
+  }
+
   return (
     <TaskListContainer>
+      {filteredTasks.length === 0 && <TaskListP>No Tasks available.</TaskListP>}
       {filteredTasks.map((task) => (
         <Task
           key={task.id}

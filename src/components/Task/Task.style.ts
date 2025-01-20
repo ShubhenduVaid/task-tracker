@@ -42,7 +42,7 @@ export const TaskPriority = styled.h2<{ priority: PriorityType }>`
 `;
 
 export const TaskButton = styled.button`
-  padding: 0.8rem;
+  padding: 0.6rem;
   background-color: #007bff;
   color: #fff;
   border: none;

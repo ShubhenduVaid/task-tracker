@@ -6,7 +6,6 @@ export const TaskFormContainer = styled.form`
   flex-direction: column;
   gap: 1rem;
   padding: 16px;
-  max-width: 400px;
   margin: 0 auto;
   margin-bottom: 20px;
   background-color: rgba(242, 235, 235, 0.5);
