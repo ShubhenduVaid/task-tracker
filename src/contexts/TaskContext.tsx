@@ -17,7 +17,8 @@ type TaskState = {
 type Action =
   | { type: "ADD_TASK"; task: Task }
   | { type: "EDIT_TASK"; task: Task }
-  | { type: "DELETE_TASK"; id: string };
+  | { type: "DELETE_TASK"; id: string }
+  | { type: "SET_FILTER"; filter: string };
 
 const initialState: TaskState = {
   tasks: [],
@@ -45,6 +46,8 @@ const taskReducer = (state: TaskState, action: Action): TaskState => {
         ...state,
         tasks: state.tasks.filter((task) => task.id !== action.id),
       };
+    case "SET_FILTER":
+      return { ...state, filter: action.filter };
     default:
       return state;
   }
