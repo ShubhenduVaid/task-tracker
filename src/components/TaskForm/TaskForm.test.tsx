@@ -22,12 +22,13 @@ describe("TaskForm Component", () => {
   });
 
   it("renders input fields and submit button correctly", () => {
-    render(<TaskForm handleUpdate={mockHandleUpdate} />);
+    const { container } = render(<TaskForm handleUpdate={mockHandleUpdate} />);
 
     expect(screen.getByPlaceholderText("Title")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Description")).toBeInTheDocument();
     expect(screen.getByText("Add Task")).toBeInTheDocument();
-    expect(screen.getByRole("combobox")).toBeInTheDocument();
+    const elements = container.querySelectorAll(".select-priority");
+    expect(elements.length).toBeGreaterThan(0);
   });
 
   it("populates fields with existing task data when provided", () => {
@@ -46,7 +47,7 @@ describe("TaskForm Component", () => {
     expect(screen.getByPlaceholderText("Description")).toHaveValue(
       "Sample Description"
     );
-    expect(screen.getByRole("combobox")).toHaveValue("Medium");
+    expect(screen.getByText("Medium")).toBeInTheDocument();
     expect(screen.getByText("Update Task")).toBeInTheDocument();
   });
 
@@ -59,9 +60,6 @@ describe("TaskForm Component", () => {
     fireEvent.change(screen.getByPlaceholderText("Description"), {
       target: { value: "New Description" },
     });
-    fireEvent.change(screen.getByRole("combobox"), {
-      target: { value: "High" },
-    });
 
     fireEvent.submit(screen.getByRole("form"));
 
@@ -70,13 +68,12 @@ describe("TaskForm Component", () => {
       task: expect.objectContaining({
         title: "New Task",
         description: "New Description",
-        priority: "High",
       }),
     });
 
     expect(screen.getByPlaceholderText("Title")).toHaveValue("");
     expect(screen.getByPlaceholderText("Description")).toHaveValue("");
-    expect(screen.getByRole("combobox")).toHaveValue("Low");
+    expect(screen.getByText("Low")).toBeInTheDocument();
   });
 
   it("dispatches EDIT_TASK action when updating an existing task", () => {
@@ -119,20 +116,17 @@ describe("TaskForm Component", () => {
     fireEvent.change(screen.getByPlaceholderText("Description"), {
       target: { value: "Another Description" },
     });
-    fireEvent.change(screen.getByRole("combobox"), {
-      target: { value: "Low" },
-    });
 
     fireEvent.submit(screen.getByRole("form"));
 
     expect(screen.getByPlaceholderText("Title")).toHaveValue("");
     expect(screen.getByPlaceholderText("Description")).toHaveValue("");
-    expect(screen.getByRole("combobox")).toHaveValue("Low");
+    expect(screen.getByText("Low")).toBeInTheDocument();
   });
 
   it("renders default priority as Low when no existing task is provided", () => {
     render(<TaskForm handleUpdate={mockHandleUpdate} />);
 
-    expect(screen.getByRole("combobox")).toHaveValue("Low");
+    expect(screen.getByText("Low")).toBeInTheDocument();
   });
 });

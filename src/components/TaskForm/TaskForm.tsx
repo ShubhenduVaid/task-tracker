@@ -102,6 +102,7 @@ const TaskForm: React.FC<TaskPopupProps> = ({ existingTask, handleUpdate }) => {
         required
       />
       <TaskFormSelect
+        className="select-priority"
         value={{ value: priority, label: priority }}
         onChange={(prop) => {
           setPriority(prop.value);
