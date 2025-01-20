@@ -43,6 +43,10 @@ This app has been made using REACT + Typescript + Vite
   npm run testCoverage
   ```
 
+## Demo of App
+
+- https://github.com/ShubhenduVaid/task-tracker/pull/1
+
 ## Functionality
 
 - Display a list of tasks, each with a title, description, and priority (e.g., Low, Medium, High)
