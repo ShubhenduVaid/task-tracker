@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useReducer } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 
 import { PriorityType } from "../components/Task";
 
@@ -58,7 +64,11 @@ const taskReducer = (state: TaskState, action: Action): TaskState => {
   }
 };
 
-export const TaskProvider: React.FC = ({ children }) => {
+type TaskProviderProps = {
+  children: ReactNode;
+};
+
+export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(taskReducer, initialState, (init) => {
     const saved = localStorage.getItem("tasks");
     return saved ? { ...init, tasks: JSON.parse(saved) } : init;

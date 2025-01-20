@@ -79,9 +79,12 @@ const TaskForm: React.FC<TaskPopupProps> = ({ existingTask, handleUpdate }) => {
           Priority Filter
           <TaskFormSelect
             value={{ value: priorityFilter, label: priorityFilter }}
-            onChange={({ value }) => {
-              setPriorityFilter(value);
-              dispatch({ type: "SET_FILTER", filter: value });
+            onChange={(prop) => {
+              if (prop) {
+                const { value } = prop as never;
+                setPriorityFilter(value);
+                dispatch({ type: "SET_FILTER", filter: value });
+              }
             }}
             options={priorityFilterOptions}
           />
@@ -105,7 +108,10 @@ const TaskForm: React.FC<TaskPopupProps> = ({ existingTask, handleUpdate }) => {
         className="select-priority"
         value={{ value: priority, label: priority }}
         onChange={(prop) => {
-          setPriority(prop.value);
+          if (prop) {
+            const { value } = prop as never;
+            setPriority(value);
+          }
         }}
         options={options}
       />
